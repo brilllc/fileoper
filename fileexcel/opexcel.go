@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/csv"
 	"fmt"
-	"io/ioutil"
-	"strings"
 )
 
 //WriteExcelNoFile .
@@ -24,31 +22,40 @@ func WriteExcelNoFile(content [][]string, filename string) error {
 }
 
 //WriteExcelFile .
-func WriteExcelFile(content [][]string, filename string) error {
-	b := &bytes.Buffer{}
-	wr := csv.NewWriter(b)
-	for _, cn := range content {
-		wr.Write(cn)
+func WriteExcelFile(text [][]string, filename, sheetName string) error {
+	file := xlsx.NewFile()
+	sheet, err := file.AddSheet(sheetName)
+	for _, cm := range text {
+		row2 = sheet.AddRow()
+		row2.SetHeightCM(1)
+		for _, t := range cm {
+			cell = row2.AddCell()
+			cel1.Value = t
+		}
 	}
-	wr.Flush()
-	ctx.Header("Content-Type", "text/csv")
-	ctx.Header("Content-Disposition", "attachment; filename="+filename)
-	tet := b.String()
-	ctx.String(200, tet)
-	return nil
+	err = file.Save(filename)
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+	return err
 }
 
 //ReadFile .
 func ReadFile(fileName string) ([][]string, error) {
-	cntb, err := ioutil.ReadFile(fileName)
+	excelFileName := fileName
+	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
-		panic(err.String())
+		fmt.Printf("open failed: %s\n", err)
+		return nil, err
 	}
-	r2 := csv.NewReader(strings.NewReader(string(cntb)))
-	ss, err := r2.ReadAll()
-	sz := len(ss)
-	for i := 0; i < sz; i++ {
-		fmt.Println(ss[i])
+	for _, sheet := range xlFile.Sheets {
+		fmt.Printf("Sheet Name: %s\n", sheet.Name)
+		for _, row := range sheet.Rows {
+			for _, cell := range row.Cells {
+				text := cell.String()
+				fmt.Printf("%s\n", text)
+			}
+		}
 	}
 	return ss, err
 }
