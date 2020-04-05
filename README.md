@@ -4,10 +4,22 @@
 
 -- csv excel
 
-生成
+-- 生成 下载 修改
 
-下载
+生成函数：
 
-修改
+func NewWriter(w io.Writer) *Writer
 
+func (w *Writer) Flush()
 
+func (w *Writer) Write(record []string) (err os.Error)
+
+func (w *Writer) WriteAll(records [][]string) (err os.Error)
+
+读取函数：
+
+func NewReader(r io.Reader) *Reader
+
+func (r *Reader) Read() (record []string, err os.Error)
+
+func (r *Reader) ReadAll() (records [][]string, err os.Error)
