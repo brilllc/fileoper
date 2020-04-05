@@ -45,7 +45,7 @@ func main() {
 	}
 
 	//创建一个新文件
-	newFileName := "D:\\gotest\\src\\source\\newfile.csv"
+	newFileName := "./newfile.csv"
 	//这样打开，每次都会清空文件内容
 	//nfs, err := os.Create(newFileName)
 
@@ -76,10 +76,10 @@ func main() {
 	newContent = append(newContent, []string{"21", "22", "23", "24", "25", "26"})
 	w.WriteAll(newContent)
 
-	filecsv.WriteCsvFile([][]string{})
-	filecsv.WriteCsvNoFile([][]string{})
-	fileexcel.WriteExcelFile([][]string{})
-	fileexcel.WriteExcelFile([][]string{})
+	filecsv.WriteCsvFile([][]string{"21", "22"})
+	filecsv.WriteCsvNoFile([][]string{"21", "22"})
+	fileexcel.WriteExcelFile([][]string{"21", "22"})
+	fileexcel.WriteExcelFile([][]string{"21", "22"})
 
 	filecsv.ReadFile(fileName)
 	fileexcel.ReadFile(fileName)
