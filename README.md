@@ -6,27 +6,57 @@
 
 -- 生成 下载 修改
 
-生成函数：
+csv函数：
 
-func NewWriter(w io.Writer) *Writer
+//不写入文件
 
-func (w *Writer) Flush()
+strs, err := filecsv.WriteCsvNoFile([][]string{{"12", "13"}, {"aa", "bb"}})
 
-func (w *Writer) Write(record []string) (err os.Error)
+//写入文件
 
-func (w *Writer) WriteAll(records [][]string) (err os.Error)
+n, err := filecsv.WriteCsvFile([][]string{{"12", "13"}, {"aa", "bb"}}, fileName)
 
-func (w *Writer)WriteCsvFile(records [][]string) (os.Error)
+//读取文件全部内容
 
-func (w *Writer)WriteExcelFile(records [][]string) (os.Error)
+strs1, err := filecsv.ReadFileAll(fileName)
+
+//打开文件
+
+nf, err := filecsv.OpenFile(fileName)
+	
+//读取一行内容
+line, err := nf.Read()
 
 
-读取函数：
+excel函数：
 
-func NewReader(r io.Reader) *Reader
+//创建文件
 
-func (r *Reader) Read() (record []string, err os.Error)
+ex := fileexcel.NewFile()
 
-func (r *Reader) ReadAll() (records [][]string, err os.Error)
+//设置sheet名
 
-func (r *Reader) ReadFile(fileName string) ([][]string, os.Error)
+sh, err := ex.AddSheet("she1")
+
+//写入一行内容
+
+row := sh.AddRow()
+
+ce := row.AddCell()
+
+ce.Value = "abc"
+
+ce1 := row.AddCell()
+
+ce1.Value = "abcd"
+
+//把内容写入文件
+
+err = ex.Save("./fc.xls")
+
+//读取文件
+
+fo, err := fileexcel.OpenFile("./fc.xls")
+for i, k := range fo.Sheets {
+	fmt.Println(i, k.Relations)
+}
